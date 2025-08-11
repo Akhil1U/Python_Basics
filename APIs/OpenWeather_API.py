@@ -42,7 +42,7 @@ def fetch_weather_data(city_name, api_key):
     except Exception as e:
         print("Something alse! An error occurred:", e)
 
-
+                                                                            
 # weather data displayed by this function
 def Display_weather(data, city_name):
     
