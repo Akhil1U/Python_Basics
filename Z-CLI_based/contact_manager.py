@@ -105,7 +105,7 @@ def add_contact():
         phone_book[serial_number()] = [name, number]
         save_contacts(phone_book)
       
-### this function will update contact by entering serial number of funciton..
+### this function will update contact by entering serial number of contact..
 def update_phone_book():
 
     print("-------all contacts---------")
@@ -143,25 +143,28 @@ def delete_contact():
     phone_book = show_phoneBook()
     print()
     while True:
+    
         try:
-            pop_contact = input("enter serial number to Delete contact :")
+            pop_contact = int(input("enter serial number to Delete contacts :"))
+            if pop_contact > len(phone_book):
+                print("you cannot enter serial number which is not exist")
+            else:
+                phone_book.pop(str(pop_contact))
+                print(f"contact deleted success fully///!")
+                global serial
+                serial = 0
+                phone_book = {serial_number():items for items in phone_book.values()}
+                save_contacts(phone_book)
+                break
 
+        except ValueError as VE:
+            print("Invalid input. Please enter a number.", VE)
+            continue
         except KeyError as KE:
             print("key Error..",KE)
             continue
         except Exception as E:
             print("something is wrong..!")
-
-        # if pop_contact == " ":
-        #     print("serial number cannot be empty...please enter valid serial number!!")
-        #     continue
-
-        if phone_book.pop(pop_contact):
-            print(f"contact deleted success fully///!")
-            global serial
-            serial = 0
-            phone_book = {serial_number():items for items in phone_book.values()}
-            save_contacts(phone_book)
 
 def main():
     print("="*50)
