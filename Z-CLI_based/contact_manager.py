@@ -11,11 +11,10 @@ def serial_number():
 
 ### call this function for save contact to json store.
 def save_contacts(phone_book):
-    # phone_book = {}
-    # serial = serial_number()
+
     with open(FILE_PATH,"w") as W:
         try:
-    
+            
             json.dump(phone_book,W, indent=4)
             
         except Exception as E:
@@ -44,15 +43,15 @@ def initial_input():
         if not number.isdigit():
             print("Phone number should contain only digits.")
             continue
-        # if not len(number) == 10:
-        #     print("please enter 10 digit....")
-        #     continue
-        # phone_book = [name,number]
+        if not len(number) == 10:
+            print("please enter 10 digit....")
+            continue
+        phone_book = [name,number]
         phone_book[serial_number()] = [name, number]
 
     save_contacts(phone_book)
 
-
+## this function will display the phone book
 def show_phoneBook():
     if os.path.exists(FILE_PATH):
         with open(FILE_PATH,"r") as R:
@@ -76,6 +75,8 @@ def show_phoneBook():
 
     return phone_book
 
+
+## this function will add one or more contact at a time..
 def add_contact():
     print("-------all contacts---------")
     phone_book = show_phoneBook()
@@ -97,13 +98,14 @@ def add_contact():
         if not number.isdigit():
             print("Phone number should contain only digits.")
             continue
-        # if not len(number) == 10:
-        #     print("please enter 10 digit....")
-        #     continue
+        if not len(number) == 10:
+            print("please enter 10 digit....")
+            continue
 
         phone_book[serial_number()] = [name, number]
         save_contacts(phone_book)
       
+### this function will update contact by entering serial number of funciton..
 def update_phone_book():
 
     print("-------all contacts---------")
@@ -128,12 +130,38 @@ def update_phone_book():
         if not number.isdigit():
             print("Phone number should contain only digits.")
             continue
-        # if not len(number) == 10:
-        #     print("please enter 10 digit....")
-        #     continue
+        if not len(number) == 10:
+            print("please enter 10 digit....")
+            continue
 
         phone_book[serial] = [name, number]
         save_contacts(phone_book)
+
+### this will delete and reserialize contact..
+def delete_contact():
+    # print("-------all contacts---------")
+    phone_book = show_phoneBook()
+    print()
+    while True:
+        try:
+            pop_contact = input("enter serial number to Delete contact :")
+
+        except KeyError as KE:
+            print("key Error..",KE)
+            continue
+        except Exception as E:
+            print("something is wrong..!")
+
+        # if pop_contact == " ":
+        #     print("serial number cannot be empty...please enter valid serial number!!")
+        #     continue
+
+        if phone_book.pop(pop_contact):
+            print(f"contact deleted success fully///!")
+            global serial
+            serial = 0
+            phone_book = {serial_number():items for items in phone_book.values()}
+            save_contacts(phone_book)
 
 def main():
     print("="*50)
@@ -155,8 +183,21 @@ def main():
         elif choice == "3":
             add_contact()
         elif choice == "4":
-            continue
-            # delete_contact()
+            if os.path.exists(FILE_PATH):
+                with open(FILE_PATH, 'r') as file:
+                    try:
+                        data = json.load(file)
+                        if not data:
+                            print("Empty phoneBook, you cannot use the delete function....! Add some contact to phone Bool")
+                            continue
+                    except json.JSONDecodeError:
+                        print("Corrupted or empty JSON file. Cannot proceed with delete.")
+                        continue
+            else:
+                print("PhoneBook file does not exist.")
+                continue
+
+            delete_contact()
         elif choice =="5":
             print("Exiting... Goodbye!")
             break
@@ -165,20 +206,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-# def delete_contact():
-#     print("-------all contacts---------")
-      # phone_book = show_phoneBook()
-      # print()
-#     serial = int(input("enter serial number to Delete contact :"))
-#     if phone_book.pop(serial):
-
-#         print(f"contact deleted success fully///!")
-#         save_contacts(phone_book)
-
 
 
 
